@@ -1,22 +1,20 @@
 package com.scm.order.processing.exception;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PurchaseOrderCreateException extends RuntimeException{
 
-    private String message;
+    private final HttpStatus status;
 
-    public PurchaseOrderCreateException(String message){
-        this.message = message;
+    public PurchaseOrderCreateException(HttpStatus status, String message){
+        super(message);
+        this.status = status;
     }
 
-    public PurchaseOrderCreateException(){
-        super();
+    public HttpStatus getStatus() {
+        return status;
     }
 
-
-    public String getMessage() {
-        return message;
-    }
 }
