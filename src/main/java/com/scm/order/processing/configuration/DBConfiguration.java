@@ -1,6 +1,5 @@
-package com.scm.order.processing;
+package com.scm.order.processing.configuration;
 
-import org.hibernate.dialect.MySQL8Dialect;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;

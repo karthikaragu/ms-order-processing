@@ -3,6 +3,7 @@ package com.scm.order.processing.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -10,15 +11,12 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "orderdetail", schema="autosparescm")
 public class OrderDetail implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1764310L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orderdetailid", insertable = false, nullable = false)
     private Integer orderDetailId;
-
-    @Column(name = "orderid", nullable = false)
-    private Integer orderId;
 
     @Column(name = "productid", nullable = false)
     private Integer productId;
@@ -29,8 +27,13 @@ public class OrderDetail implements Serializable {
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
-    @Column(name = "orderdetailstatus")
-    private String orderDetailStatus;
+    @ManyToOne
+    @JoinColumn(name="orderdetailstatus", referencedColumnName = "statuscode", nullable = false)
+    private OrderStatus orderDetailStatus;
 
-    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="orderid",nullable = false)
+    @NotNull(message = "Mandatory Field - Order")
+    private PurchaseOrder order;
+
 }

@@ -10,6 +10,9 @@ spring:
   cloud:
     discovery:
       enabled: false
+    loadbalancer:
+      ribbon:
+        enabled: false
 
 auto-spare:
   scm:

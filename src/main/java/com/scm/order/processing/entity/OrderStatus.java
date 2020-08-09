@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "orderstatus", schema="autosparescm")
 public class OrderStatus implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 19457490L;
 
     @Id
     @Column(name = "statuscode", insertable = false, nullable = false)
@@ -21,5 +21,4 @@ public class OrderStatus implements Serializable {
     @Column(name = "statusdescription", nullable = false)
     private String statusDescription;
 
-    
 }
