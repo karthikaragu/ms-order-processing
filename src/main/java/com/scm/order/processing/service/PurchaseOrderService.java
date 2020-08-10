@@ -9,7 +9,7 @@ import com.scm.order.processing.mapper.PurchaseOrderDTOMapper;
 import com.scm.order.processing.repository.PurchaseOrderRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.apache.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,17 +22,17 @@ public class PurchaseOrderService {
     private PurchaseOrderDTOMapper poMapper;
 
     public PurchaseOrderResponseDTO createOrder(PurchaseOrderDTO orderDTO){
-        PurchaseOrder order = null;
-        purchaseOrderHelper.populateOrderAmount(orderDTO);
+        PurchaseOrderResponseDTO dto = null;
         try{
-            order = poMapper.purchaseOrderDTOToPurchaseOrderEntity(orderDTO);
+            purchaseOrderHelper.populateOrderAmount(orderDTO);
+            PurchaseOrder order = poMapper.purchaseOrderDTOToPurchaseOrderEntity(orderDTO);
             purchaseOrderRepository.save(order);
+            dto = PurchaseOrderResponseDTO.builder().order(order).build();
         }catch(Exception e){
             log.error("Error while saving order ",e);
-            throw new PurchaseOrderCreateException(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
+            throw new PurchaseOrderCreateException(HttpStatus.SC_INTERNAL_SERVER_ERROR,e.getMessage());
         }
-        return PurchaseOrderResponseDTO.builder()
-                .order(order).build();
+        return dto;
     }
 
 }

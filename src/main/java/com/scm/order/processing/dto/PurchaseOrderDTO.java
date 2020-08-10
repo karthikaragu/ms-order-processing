@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.Valid;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -17,6 +18,7 @@ public class PurchaseOrderDTO implements Serializable {
 
     private static final long serialVersionUID = 24672579L;
 
+    @FutureOrPresent(message="Date must not be in the Past !!")
     private LocalDateTime invoiceDate;
 
     @NotNull(message = "Enter Ordered By !!")

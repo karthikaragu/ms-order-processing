@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "purchaseorder", schema="autosparescm")
@@ -32,7 +32,7 @@ public class PurchaseOrder implements Serializable {
     private BigDecimal amount;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<OrderDetail> orderDetails;
+    private Set<OrderDetail> orderDetails;
 
     @ManyToOne
     @JoinColumn(name="orderstatus", referencedColumnName = "statuscode", nullable = false)

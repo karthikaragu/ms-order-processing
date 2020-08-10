@@ -1,5 +1,6 @@
 package com.scm.order.processing.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -34,6 +35,7 @@ public class OrderDetail implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="orderid",nullable = false)
     @NotNull(message = "Mandatory Field - Order")
+    @JsonIgnore
     private PurchaseOrder order;
 
 }

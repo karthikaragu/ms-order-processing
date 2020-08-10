@@ -7,7 +7,7 @@ import com.scm.order.processing.enums.ErrorType;
 import com.scm.order.processing.exception.PurchaseOrderCreateException;
 import com.scm.order.processing.service.PurchaseOrderService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.apache.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +35,7 @@ public class PurchaseOrderController {
         }
         return Optional.ofNullable(purchaseOrderService.createOrder(orderDTO))
                 .map(order -> ResponseEntity.ok().body(order))
-                .orElseThrow(() -> new PurchaseOrderCreateException(HttpStatus.INTERNAL_SERVER_ERROR,"Order Creation Failed"));
+                .orElseThrow(() -> new PurchaseOrderCreateException(HttpStatus.SC_INTERNAL_SERVER_ERROR,"Order Creation Failed"));
     }
 
     private PurchaseOrderResponseDTO fetchPurchaseOrderResponseDTO(BindingResult result){
