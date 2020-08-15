@@ -6,13 +6,15 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 @Component
 public class PurchaseOrderHelper {
 
-    public void populateOrderAmount(PurchaseOrderDTO orderDTO){
+    public void populateOrderAmount(PurchaseOrderDTO orderDTO, Map<Integer, BigDecimal> productCostMap){
         if(CollectionUtils.isNotEmpty(orderDTO.getOrderDetails())){
-            orderDTO.getOrderDetails().forEach(detail -> detail.setAmount(BigDecimal.ONE.multiply(detail.getQuantity())));
+            orderDTO.getOrderDetails().forEach(detail ->
+                    detail.setAmount(productCostMap.get(detail.getProductId()).multiply(detail.getQuantity())));
             orderDTO.setAmount(orderDTO.getOrderDetails().stream()
                     .map(OrderDetailDTO::getAmount)
                     .reduce(BigDecimal.ZERO,BigDecimal::add));

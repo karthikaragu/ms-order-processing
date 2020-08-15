@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -27,7 +27,7 @@ public class PurchaseOrderDTO implements Serializable {
     private BigDecimal amount;
 
     @NotEmpty(message = "Order should have atleast one product !!")
-    private List<@Valid OrderDetailDTO> orderDetails;
+    private Set<@Valid OrderDetailDTO> orderDetails;
 
     private String statusCode;
 }
