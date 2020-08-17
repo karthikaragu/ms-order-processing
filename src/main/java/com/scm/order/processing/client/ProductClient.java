@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 
-@FeignClient(value = "ms-product-management", url = "http://localhost:8021/productmanagementservices")
+@FeignClient(name = "ms-product-management")
 public interface ProductClient {
-    
-    @GetMapping(value="/products/search/findByProductIdIn")
+
+    @GetMapping(value="/productmanagementservices/products/search/findByProductIdIn")
     CollectionModel<Product> retriveProduct(@RequestParam("productIds") List<Integer> productIds);
 
 }

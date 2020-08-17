@@ -1,5 +1,6 @@
 package com.scm.order.processing.service;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.scm.order.processing.client.ProductClient;
 import com.scm.order.processing.client.UserClient;
 import com.scm.order.processing.dto.ErrorDTO;
@@ -66,11 +67,11 @@ public class PurchaseOrderService {
 
     private Map<Integer, BigDecimal> validateUserAndProduct(PurchaseOrderDTO orderDTO,List<ErrorDTO> errorList){
         Map<Integer, BigDecimal> productCostMap = new HashMap<>();
-        if(userClient.checkUserExists(orderDTO.getOrderedBy())){
+        if(checkUserExists(orderDTO.getOrderedBy())){
             List<Integer> productIdList = orderDTO.getOrderDetails().stream()
                                             .map(OrderDetailDTO::getProductId)
                                             .collect(Collectors.toList());
-            CollectionModel<Product> productEntities = productClient.retriveProduct(productIdList);
+            CollectionModel<Product> productEntities = retrieveProducts(productIdList);
             List<Product> product = new ArrayList<>(productEntities.getContent());
             product.forEach(prod ->{
                 if(NumberUtils.INTEGER_ZERO.equals(prod.getStock())){
@@ -92,6 +93,16 @@ public class PurchaseOrderService {
             errorList.add(retrieveErrorDTO("Invalid Customer Id for the Order", "OP-ER01"));
         }
         return productCostMap;
+    }
+
+    @HystrixCommand()
+    private boolean checkUserExists(Integer userId){
+        return  userClient.checkUserExists(userId);
+    }
+
+    @HystrixCommand()
+    private CollectionModel<Product> retrieveProducts(List<Integer> productIdList){
+        return  productClient.retriveProduct(productIdList);
     }
 
     private ErrorDTO retrieveErrorDTO(String message, String errorCode){
