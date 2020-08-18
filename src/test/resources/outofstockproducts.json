@@ -1,0 +1,53 @@
+{
+  "_embedded": {
+    "products": [
+      {
+        "productId": 2,
+        "productName": "Brakeshoe",
+        "stock": 10,
+        "vendorId": 8,
+        "availability": "N",
+        "cost": 200,
+        "launchDate": "2020-08-12T21:06:50",
+        "productDescription": "TVS Brand, Good Quality",
+        "_links": {
+          "self": {
+            "href": "http://localhost:8021/productmanagementservices/products/2"
+          },
+          "product": {
+            "href": "http://localhost:8021/productmanagementservices/products/2"
+          },
+          "ratings": {
+            "href": "http://localhost:8021/productmanagementservices/products/2/ratings"
+          }
+        }
+      },
+      {
+        "productId": 4,
+        "productName": "Piston",
+        "stock": 0,
+        "vendorId": 9,
+        "availability": "Y",
+        "cost": 5000,
+        "launchDate": "2020-08-13T11:38:49",
+        "productDescription": "Hyundai Brand, 4 Gear",
+        "_links": {
+          "self": {
+            "href": "http://localhost:8021/productmanagementservices/products/4"
+          },
+          "product": {
+            "href": "http://localhost:8021/productmanagementservices/products/4"
+          },
+          "ratings": {
+            "href": "http://localhost:8021/productmanagementservices/products/4/ratings"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "http://localhost:8021/productmanagementservices/products/search/findByProductIdIn?productIds=2%2C4"
+    }
+  }
+}

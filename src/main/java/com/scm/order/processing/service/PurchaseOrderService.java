@@ -1,13 +1,11 @@
 package com.scm.order.processing.service;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.scm.order.processing.client.ProductClient;
 import com.scm.order.processing.client.UserClient;
 import com.scm.order.processing.dto.ErrorDTO;
 import com.scm.order.processing.dto.OrderDetailDTO;
 import com.scm.order.processing.dto.PurchaseOrderDTO;
 import com.scm.order.processing.dto.PurchaseOrderResponseDTO;
-import com.scm.order.processing.entity.Product;
 import com.scm.order.processing.entity.PurchaseOrder;
 import com.scm.order.processing.enums.ErrorType;
 import com.scm.order.processing.exception.PurchaseOrderCreateException;
@@ -19,7 +17,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.http.HttpStatus;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -67,13 +64,12 @@ public class PurchaseOrderService {
 
     private Map<Integer, BigDecimal> validateUserAndProduct(PurchaseOrderDTO orderDTO,List<ErrorDTO> errorList){
         Map<Integer, BigDecimal> productCostMap = new HashMap<>();
-        if(checkUserExists(orderDTO.getOrderedBy())){
+        if(userClient.checkUserExists(orderDTO.getOrderedBy())){
             List<Integer> productIdList = orderDTO.getOrderDetails().stream()
                                             .map(OrderDetailDTO::getProductId)
                                             .collect(Collectors.toList());
-            CollectionModel<Product> productEntities = retrieveProducts(productIdList);
-            List<Product> product = new ArrayList<>(productEntities.getContent());
-            product.forEach(prod ->{
+            productClient.retriveProduct(productIdList).getContent()
+            .forEach(prod ->{
                 if(NumberUtils.INTEGER_ZERO.equals(prod.getStock())){
                     errorList.add(retrieveErrorDTO("Product Id : " +prod.getProductId()+ "-"
                             +prod.getProductName()+ " out of stock.", "OP-ER02"));
@@ -86,23 +82,13 @@ public class PurchaseOrderService {
             });
             productIdList.removeAll(productCostMap.keySet());
             if(!productIdList.isEmpty()){
-                errorList.add(retrieveErrorDTO("Product Ids : " +productIdList+ " are invalid.", "OP-ER04"));
+                errorList.add(retrieveErrorDTO("Product Ids : " +productIdList+ " are invalid or Product Service Unavailable", "OP-ER04"));
             }
 
         }else{
-            errorList.add(retrieveErrorDTO("Invalid Customer Id for the Order", "OP-ER01"));
+            errorList.add(retrieveErrorDTO("Invalid Customer Id for the Order or User Service Unavailable", "OP-ER01"));
         }
         return productCostMap;
-    }
-
-    @HystrixCommand()
-    private boolean checkUserExists(Integer userId){
-        return  userClient.checkUserExists(userId);
-    }
-
-    @HystrixCommand()
-    private CollectionModel<Product> retrieveProducts(List<Integer> productIdList){
-        return  productClient.retriveProduct(productIdList);
     }
 
     private ErrorDTO retrieveErrorDTO(String message, String errorCode){

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 
-@FeignClient(name = "ms-product-management")
+@FeignClient(name = "ms-product-management", fallback = ProductClientFallback.class)
 public interface ProductClient {
 
     @GetMapping(value="/productmanagementservices/products/search/findByProductIdIn")

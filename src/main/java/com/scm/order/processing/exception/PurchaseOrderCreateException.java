@@ -4,7 +4,7 @@ import org.apache.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PurchaseOrderCreateException extends RuntimeException{
+public class PurchaseOrderCreateException extends RuntimeException {
 
     private final int status;
 
