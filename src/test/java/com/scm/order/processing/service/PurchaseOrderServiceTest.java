@@ -6,7 +6,6 @@ import com.scm.order.processing.dto.OrderDetailDTO;
 import com.scm.order.processing.dto.PurchaseOrderDTO;
 import com.scm.order.processing.dto.PurchaseOrderResponseDTO;
 import com.scm.order.processing.entity.OrderDetail;
-import com.scm.order.processing.entity.Product;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.After;
@@ -16,7 +15,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -138,16 +136,4 @@ public class PurchaseOrderServiceTest {
         return Files.readString(Paths.get(filePath));
     }
 
-    private CollectionModel<Product> fetchProducts(){
-        return CollectionModel.of(Arrays.asList(fetchProduct(1,BigDecimal.TEN),fetchProduct(2,BigDecimal.ONE)));
-    }
-
-    private Product fetchProduct(Integer id,BigDecimal cost){
-        Product a = new Product();
-        a.setProductId(id);
-        a.setCost(cost);
-        a.setStock(10);
-        a.setAvailability("Y");
-        return a;
-    }
 }
